@@ -22,15 +22,15 @@ export default class App extends React.Component {
     // USE THIS TO PARSE FILE.NAME WHEN NOT IN TEST: ${file.name.replace(/\s/g, '-')}
     const fileName = `${randomString()}-test-image`;
     console.log('fileName:', fileName)
-    const dataURI = 'data:image/jpeg;base64,' + file.base64
-    const type = dataURI.split(';')[0].split('/')[1]
-    console.log('file-type:', type)
+    // const dataURI = 'data:image/jpeg;base64,' + file.base64
+    // const type = dataURI.split(';')[0].split('/')[1]
+    console.log('file-type:', file.type)
     // We will now send a request to our server to get a "signed url" from Amazon. We are essentially letting AWS know that we are going to upload a file soon. We are only sending the file-name and file-type as strings. We are not sending the file itself at this point.
     axios
       .get(`http://192.168.21.192:3010/api/signs3`, {
         params: {
           'file-name': fileName,
-          'file-type': 'image/jpeg',
+          'file-type': file.type,
         },
       })
       .then(response => {
@@ -49,12 +49,12 @@ export default class App extends React.Component {
         'Content-Type': file.type
       },
     };
-    console.log('SR:', signedRequest, 'file:', file, 'options:', options)
+    // console.log('SR:', signedRequest, 'file:', file, 'options:', options)
     axios
       .put(signedRequest, file, options)
       .then(response => {
         this.setState({ isUploading: false, url });
-        console.log(response)
+        // console.log(response)
         // THEN DO SOMETHING WITH THE URL. SEND TO DB USING POST REQUEST OR SOMETHING
       })
       .catch(err => {
